@@ -1,0 +1,28 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # yoki asosiy branch nomi, masalan, master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Ishlaydigan tizim (Ubuntu ishlatilmoqda)
+
+    steps:
+      - name: Add SSH host to known_hosts
+        run: |
+          mkdir -p ~/.ssh  # ~/.ssh papkasini yaratish
+          ssh-keyscan -H 206.189.114.116 >> ~/.ssh/known_hosts  # SSH hostni known_hosts fayliga qo'shish
+
+      - name: Check out the code
+        uses: actions/checkout@v2  # GitHub repozitoriyasidan kodni olish
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3  # SSH orqali serverga ulanish uchun
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # GitHub secrets orqali SSH kaliti
+
+      - name: Deploy to server
+        run: |
+          ssh -v root@206.189.114.116 'cd /var/www/html/pdf && git pull origin main'  # Serverga kodni pull qilish
