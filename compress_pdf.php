@@ -1,6 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
-    $uploadDir = 'var/www/html/pdf/uploads';
+    $uploadDir = '/var/www/html/pdf/uploads';
     $filename = $_FILES['file']['name'];
 
     // Fayl nomini 50 ta belgidan ortiq bo'lmasligini ta'minlash
