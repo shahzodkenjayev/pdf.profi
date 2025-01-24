@@ -46,5 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
     echo "Fayl tanlanmagan.";
 }
 ?>
+
+<!-- HTML forma fayl tanlash va yuborish uchun -->
+<form action="compress_pdf.php" method="POST" enctype="multipart/form-data">
+    <label for="file">PDF faylni tanlang:</label>
+    <input type="file" name="file" id="file" accept="application/pdf" required>
+    <button type="submit">Faylni yuklash va kichraytirish</button>
+</form>
+
 <!-- Asosiy sahifaga qaytish tugmasi -->
 <br><a href="index.html"><button>Asosiy sahifaga qaytish</button></a>
