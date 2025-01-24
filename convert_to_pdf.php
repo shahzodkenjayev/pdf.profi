@@ -1,37 +1,56 @@
 <?php
-$type = $_GET['type']; // URL parametridan turini olish (jpg, png, word)
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
+    $uploadDir = '/var/www/html/pdf/uploads';
+    $filename = $_FILES['file']['name'];
+    $fileTmpName = $_FILES['file']['tmp_name'];
+
+    // Fayl nomini 50 ta belgidan ortiq bo'lmasligini ta'minlash
+    $filename = substr($filename, 0, 50);
+    $filename = preg_replace('/[^A-Za-z0-9\-\.]/', '_', $filename); // kengaytmalarni tozalash
+
+    // Faylni tanlash va saqlash
+    $uploadFile = $uploadDir . '/' . basename($filename);
+
+    // Faylni yuklash
+    if (move_uploaded_file($fileTmpName, $uploadFile)) {
+        // Faylning kengaytmasini tekshirish
+        $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (!in_array($fileExt, ['docx', 'doc', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods'])) {
+            echo "Faqat Office fayllari yoki Open Document fayllarini yuklash mumkin.";
+            exit;
+        }
+
+        // Faylni PDF formatiga o'zgartirish (unoconv yoki libreoffice)
+        $outputFile = $uploadDir . '/' . pathinfo($filename, PATHINFO_FILENAME) . '.pdf';
+
+        // unoconv orqali faylni PDF ga o'zgartirish
+        $command = "unoconv -f pdf -o $outputFile $uploadFile";
+        exec($command, $output, $resultCode);
+
+        if ($resultCode !== 0) {
+            echo "Xatolik yuz berdi: " . implode("\n", $output);
+        } else {
+            echo "Fayl muvaffaqiyatli PDF formatiga o'zgartirildi. <a href='/pdf/uploads/" . basename($outputFile) . "'>Yangi faylni yuklab olish</a>";
+
+            // Yangi PDF faylni ko'rsatish
+            // Faylni o'chirish
+            unlink($uploadFile);
+        }
+    } else {
+        echo "Faylni yuklashda xatolik yuz berdi.";
+    }
+} else {
+    echo "Fayl tanlanmagan.";
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF ni <?php echo ucfirst($type); ?> ga aylantirish</title>
-</head>
-<body>
-    <h1>PDF ni <?php echo ucfirst($type); ?> ga aylantirish</h1>
+<!-- HTML forma fayl tanlash va yuborish uchun -->
+<form action="convert_to_pdf.php" method="POST" enctype="multipart/form-data">
+    <label for="file">Faylni tanlang (Office yoki Open Document formatlari):</label>
+    <input type="file" name="file" id="file" required>
+    <button type="submit">Faylni PDF ga konvertatsiya qilish</button>
+</form>
 
-    <?php if ($type == 'jpg') { ?>
-        <form action="convert_from_pdf.php" method="post" enctype="multipart/form-data">
-            <label for="pdf_to_jpg">PDF faylini JPG ga aylantirish:</label>
-            <input type="file" name="file" id="pdf_to_jpg" accept=".pdf" required>
-            <button type="submit" name="action" value="pdf_to_jpg">PDF ni JPG ga aylantirish</button>
-        </form>
-    <?php } elseif ($type == 'png') { ?>
-        <form action="convert_from_pdf.php" method="post" enctype="multipart/form-data">
-            <label for="pdf_to_png">PDF faylini PNG ga aylantirish:</label>
-            <input type="file" name="file" id="pdf_to_png" accept=".pdf" required>
-            <button type="submit" name="action" value="pdf_to_png">PDF ni PNG ga aylantirish</button>
-        </form>
-    <?php } elseif ($type == 'word') { ?>
-        <form action="convert_from_pdf.php" method="post" enctype="multipart/form-data">
-            <label for="pdf_to_word">PDF faylini Word ga aylantirish:</label>
-            <input type="file" name="file" id="pdf_to_word" accept=".pdf" required>
-            <button type="submit" name="action" value="pdf_to_word">PDF ni Word ga aylantirish</button>
-        </form>
-    <?php } ?>
-
-    <p><a href="index.html">Asosiy sahifaga qaytish</a></p>
-</body>
-</html>
+<!-- Asosiy sahifaga qaytish tugmasi -->
+<br><a href="index.html"><button>Asosiy sahifaga qaytish</button></a>
