@@ -1,0 +1,130 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('fon.jpg'); /* Rasmingizning manzili */
+    background-size: cover; /* Rasmni ekranga moslashtirish */
+    background-position: center; /* Rasmni markazga joylashtirish */
+    background-repeat: no-repeat; /* Rasmni takrorlashni o'chirish */
+}
+
+.container {
+    text-align: center;
+    color: white;
+    padding: 50px;
+    background-color: rgba(0, 0, 0, 0.5); /* Matn ostiga yarim shaffof fon */
+    margin: 100px auto;
+    width: 80%;
+    border-radius: 10px;
+}
+.logo {
+    display: flex;
+    justify-content: flex-start; /* Rasmni chap tomonga surish */
+  }
+  
+  .logo img {
+    width: auto; /* Logoning o'lchamini kerakli tarzda sozlang */
+    height: 50px; /* Misol uchun, logoning balandligini o'rnatish */
+  }
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+.button-container {
+    display: flex; /* Bitta qatorda joylash uchun */
+    justify-content: center; /* Markazga joylash */
+    gap: 20px; /* Tugmalar orasidagi bo'shliq */
+}
+
+.custom-button {
+    font-size: 20px; /* Tugma matni kattaligi */
+    padding: 15px 30px; /* Tugma hajmini oshirish */
+    background-color: #007BFF; /* Tugma rangi */
+    color: white; /* Matn rangi */
+    border: none; /* Chegarani olib tashlash */
+    border-radius: 5px; /* Yantig'roq burchaklar */
+    cursor: pointer; /* Tugma ustiga kursorni o'zgartirish */
+    transition: background-color 0.3s; /* Tugma rangi animatsiyasi */
+}
+
+.custom-button:hover {
+    background-color: #0056b3; /* Hover holatida rang */
+}
+
+
+
+
+
+.button1 {
+  background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.button2 {
+    background-color: #321fad; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .button3 {
+    background-color: #ad097f; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .button4 {
+    background-color: #f00909; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .button5 {
+    background-color: #0716b3; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .button6 {
+    background-color: #9f04aa; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .button7 {
+    background-color: #f00909; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
