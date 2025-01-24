@@ -67,11 +67,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 ?>
 
 <!-- HTML forma fayl tanlash va yuborish uchun -->
-<form action="compress_pdf.php" method="POST" enctype="multipart/form-data">
+<form id="uploadForm" action="compress_pdf.php" method="POST" enctype="multipart/form-data">
     <label for="file">PDF faylni tanlang:</label>
     <input type="file" name="file" id="file" accept="application/pdf" required>
     <button type="submit">Faylni yuklash va kichraytirish</button>
 </form>
 
+<!-- Progress bar qo'shish -->
+<div id="progressContainer" style="display:none;">
+    <progress id="progressBar" value="0" max="100" style="width:100%;"></progress>
+    <span id="percentage">0%</span>
+</div>
+
 <!-- Asosiy sahifaga qaytish tugmasi -->
 <br><a href="index.html"><button>Asosiy sahifaga qaytish</button></a>
+
+<script>
+    const uploadForm = document.getElementById('uploadForm');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const percentage = document.getElementById('percentage');
+    
+    uploadForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Normal submitni to'xtatib turish
+
+        const formData = new FormData(uploadForm);
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open('POST', uploadForm.action, true);
+
+        // Progressni yangilash
+        xhr.upload.addEventListener('progress', function(e) {
+            if (e.lengthComputable) {
+                const percent = (e.loaded / e.total) * 100;
+                progressBar.value = percent;
+                percentage.textContent = Math.round(percent) + '%';
+            }
+        });
+
+        // Faylni yuborish
+        xhr.send(formData);
+
+        // Fayl yuklanmoqda, progress barni ko'rsatish
+        progressContainer.style.display = 'block';
+    });
+</script>
