@@ -10,10 +10,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
     // Fayl kengaytmasini olish
     $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
+    // Fayl turi tekshiruvi (faqat PDF fayllarini qabul qilish)
+    if ($_FILES['file']['type'] != 'application/pdf') {
+        echo "Faqat PDF fayllarini yuklash mumkin.";
+        exit;
+    }
+
     // Fayl kengaytmasini .pdf ga o'zgartirish
     if ($fileExt != 'pdf') {
         $filename = preg_replace('/\.[^.]+$/', '', $filename); // Kengaytmani olib tashlash
         $filename .= '.pdf'; // Yangi kengaytmada .pdf qo'shish
+    }
+
+    // Yuklash papkasiga yozish huquqlarini tekshirish
+    if (!is_writable($uploadDir)) {
+        echo "Yuklash papkasi yozish huquqiga ega emas.";
+        exit;
     }
 
     $uploadFile = $uploadDir . basename($filename);
@@ -29,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
         $resultCode = null;
         exec($command, $output, $resultCode);
 
+        // Natijani tekshirish
         if ($resultCode != 0) {
             echo "Xatolik yuz berdi: " . implode("\n", $output);
         } else {
