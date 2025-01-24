@@ -25,20 +25,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
         $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$outputFile $uploadFile";
         
         // Komandani bajarish
-        exec($command);
+        $output = null;
+        $resultCode = null;
+        exec($command, $output, $resultCode);
 
-        // Natijani ko'rsatish
-        echo "PDF fayl muvaffaqiyatli kichraytirildi. <a href='/pdf/uploads/" . basename($outputFile) . "'>Yangi faylni yuklab olish</a>";
+        if ($resultCode != 0) {
+            echo "Xatolik yuz berdi: " . implode("\n", $output);
+        } else {
+            // Natijani ko'rsatish
+            echo "PDF fayl muvaffaqiyatli kichraytirildi. <a href='/pdf/uploads/" . basename($outputFile) . "'>Yangi faylni yuklab olish</a>";
 
-        // Faylni o'chirish
-        if (file_exists($uploadFile)) {
-            unlink($uploadFile);
+            // Faylni o'chirish
+            if (file_exists($uploadFile)) {
+                unlink($uploadFile);
+            }
+            if (file_exists($outputFile)) {
+                unlink($outputFile);
+            }
+
+            echo "<br>Fayl o'chirildi.";
         }
-        if (file_exists($outputFile)) {
-            unlink($outputFile);
-        }
-
-        echo "<br>Fayl o'chirildi.";
     } else {
         echo "Faylni yuklashda xatolik yuz berdi.";
     }
