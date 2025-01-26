@@ -1,5 +1,11 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
+    // Faylni tekshirish
+    if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+        echo "Fayl tanlanmagan yoki xatolik yuz berdi.";
+        exit;
+    }
+
     $uploadDir = '/var/www/html/pdf/uploads/';
     $filename = $_FILES['file']['name'];
 
@@ -52,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
         echo "Faylni yuklashda xatolik yuz berdi.";
     }
 } else {
-    echo "Fayl tanlanmagan.";
+    echo "Fayl tanlanmagan yoki xatolik yuz berdi.";
 }
 ?>
 
@@ -65,3 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 
 <!-- Asosiy sahifaga qaytish tugmasi -->
 <br><a href="index.html"><button>Asosiy sahifaga qaytish</button></a>
+
+<script>
+    const uploadForm = document.getElementById('uploadForm');
+    uploadForm.addEventListener('submit', function(e) {
+        // Fayl tanlanganini tekshirish
+        if (document.getElementById('file').files.length === 0) {
+            alert('Iltimos, faylni tanlang!');
+            e.preventDefault(); // Forma yuborilmasligi uchun to'xtatish
+        }
+    });
+</script>
