@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
             echo "Xatolik yuz berdi: " . implode("\n", $output);
         } else {
             // Natijani ko'rsatish
-            echo "PDF fayl muvaffaqiyatli kichraytirildi. <a href='/pdf/uploads/" . basename($outputFile) . "'>Yangi faylni yuklab olish</a>";
+            echo "PDF fayl muvaffaqiyatli kichraytirildi. <a href='/uploads/" . basename($outputFile) . "'>Yangi faylni yuklab olish</a>";
         }
     } else {
         echo "Faylni yuklashda xatolik yuz berdi.";
