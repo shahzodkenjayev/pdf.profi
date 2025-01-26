@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
     $uploadFile = $uploadDir . basename($filename);
 
     if (mime_content_type($_FILES['file']['tmp_name']) !== 'application/pdf') {
-        echo "Faqat PDF fayllarini yuklash mumkin.";
+        echo "Faqat PDF fayllarini yuklash mumkin..";
         exit;
     }
 
