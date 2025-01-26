@@ -63,15 +63,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 ?>
 
 <!-- HTML forma fayl tanlash va yuborish uchun -->
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="https://profiuniversity.uz/site/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konvertatsiya qilish</title>
+</head>
+<body>
+    <a href="https://profiuniversity.uz/" class="logo">
+        <img class="logo_first" src="logo.svg" alt="">
+        <img class="logo_second" src="logo_white.svg" alt="">
+    </a>
+
+<div class="button-container">
 <form id="uploadForm" action="compress_pdf.php" method="POST" enctype="multipart/form-data">
     <label for="file">PDF faylni tanlang:</label>
+    
     <input type="file" name="file" id="file" accept="application/pdf" required>
-    <button type="submit">Faylni yuklash va kichraytirish</button>
+    <button class = "button8" type="submit">Faylni yuklash va kichraytirish</button>
 </form>
 
 <!-- Asosiy sahifaga qaytish tugmasi -->
-<br><a href="index.html"><button>Asosiy sahifaga qaytish</button></a>
-
+<br><a href="index.html"><button class = "button9" >Asosiy sahifaga qaytish</button></a>
+</div>
 <script>
     const uploadForm = document.getElementById('uploadForm');
     uploadForm.addEventListener('submit', function(e) {
