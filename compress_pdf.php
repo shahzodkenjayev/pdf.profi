@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
     // Faylni yuklash
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
         // Kichraytirish
-        $outputFile = $uploadDir . 'compressed_' . basename($filename);
+        $outputFile = $uploadDir . 'cd_' . basename($filename);
         $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=" . escapeshellarg($outputFile) . " " . escapeshellarg($uploadFile);
 
         // Komandani bajarish
