@@ -67,8 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="https://profiuniversity.uz/site/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://profiuniversity.uz/site/images/favicon.ico" type="image/x-icon">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Konvertatsiya qilish</title>
 </head>
@@ -89,6 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 <!-- Asosiy sahifaga qaytish tugmasi -->
 <br><a href="index.html"><button class = "button9" >Asosiy sahifaga qaytish</button></a>
 </div>
+    </body>
+    </html>
 <script>
     const uploadForm = document.getElementById('uploadForm');
     uploadForm.addEventListener('submit', function(e) {
