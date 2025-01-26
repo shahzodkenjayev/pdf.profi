@@ -1,62 +1,30 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
-    $uploadDir = '/var/www/html/pdf/uploads';
-    $filename = $_FILES['file']['name'];
-
-    // Fayl nomini 50 ta belgidan ortiq bo'lmasligini ta'minlash
-    $filename = substr($filename, 0, 50);
-    $filename = preg_replace('/[^A-Za-z0-9\-\.]/', '_', $filename); // kengaytmalarni ham tozalash
-
-    // Fayl kengaytmasini olish
+    $uploadDir = '/var/www/html/pdf/uploads/';
+    $filename = substr($_FILES['file']['name'], 0, 50);
+    $filename = preg_replace('/[^A-Za-z0-9\-.]/', '_', $filename);
     $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $uploadFile = $uploadDir . basename($filename);
 
-    // Fayl turi tekshiruvi (faqat PDF fayllarini qabul qilish)
-    if ($_FILES['file']['type'] != 'application/pdf') {
+    if (mime_content_type($_FILES['file']['tmp_name']) !== 'application/pdf') {
         echo "Faqat PDF fayllarini yuklash mumkin.";
         exit;
     }
 
-    // Fayl kengaytmasini .pdf ga o'zgartirish
-    if ($fileExt != 'pdf') {
-        $filename = preg_replace('/\.[^.]+$/', '', $filename); // Kengaytmani olib tashlash
-        $filename .= '.pdf'; // Yangi kengaytmada .pdf qo'shish
-    }
-
-    // Yuklash papkasiga yozish huquqlarini tekshirish
     if (!is_writable($uploadDir)) {
         echo "Yuklash papkasi yozish huquqiga ega emas.";
         exit;
     }
 
-    $uploadFile = $uploadDir . basename($filename);
-
-    // Faylni yuklash
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
-        // Kichraytirish
         $outputFile = $uploadDir . 'compressed_' . basename($filename);
-        $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$outputFile $uploadFile";
-        
-        // Komandani bajarish
-        $output = null;
-        $resultCode = null;
+        $command = "gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=" . escapeshellarg($outputFile) . " " . escapeshellarg($uploadFile);
         exec($command, $output, $resultCode);
 
-        // Natijani tekshirish
-        if ($resultCode != 0) {
-            echo "Xatolik yuz berdi: " . implode("\n", $output);
+        if ($resultCode === 0) {
+            echo "PDF muvaffaqiyatli kichraytirildi. <a href='/pdf/uploads/" . basename($outputFile) . "'>Yuklab olish</a>";
         } else {
-            // Natijani ko'rsatish
-            echo "PDF fayl muvaffaqiyatli kichraytirildi. <a href='/pdf/uploads/" . basename($outputFile) . "'>Yangi faylni yuklab olish</a>";
-
-            // Faylni o'chirish
-            if (file_exists($uploadFile)) {
-                unlink($uploadFile);
-            }
-            if (file_exists($outputFile)) {
-                unlink($outputFile);
-            }
-
-            echo "<br>Fayl o'chirildi.";
+            echo "Xatolik yuz berdi: " . implode("\n", $output);
         }
     } else {
         echo "Faylni yuklashda xatolik yuz berdi.";
@@ -65,50 +33,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
     echo "Fayl tanlanmagan.";
 }
 ?>
-
-<!-- HTML forma fayl tanlash va yuborish uchun -->
-<form id="uploadForm" action="compress_pdf.php" method="POST" enctype="multipart/form-data">
-    <label for="file">PDF faylni tanlang:</label>
-    <input type="file" name="file" id="file" accept="application/pdf" required>
-    <button type="submit">Faylni yuklash va kichraytirish</button>
-</form>
-
-<!-- Progress bar qo'shish -->
-<div id="progressContainer" style="display:none;">
-    <progress id="progressBar" value="0" max="100" style="width:100%;"></progress>
-    <span id="percentage">0%</span>
-</div>
-
-<!-- Asosiy sahifaga qaytish tugmasi -->
-<br><a href="index.html"><button>Asosiy sahifaga qaytish</button></a>
-
-<script>
-    const uploadForm = document.getElementById('uploadForm');
-    const progressContainer = document.getElementById('progressContainer');
-    const progressBar = document.getElementById('progressBar');
-    const percentage = document.getElementById('percentage');
-    
-    uploadForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Normal submitni to'xtatib turish
-
-        const formData = new FormData(uploadForm);
-        const xhr = new XMLHttpRequest();
-        
-        xhr.open('POST', uploadForm.action, true);
-
-        // Progressni yangilash
-        xhr.upload.addEventListener('progress', function(e) {
-            if (e.lengthComputable) {
-                const percent = (e.loaded / e.total) * 100;
-                progressBar.value = percent;
-                percentage.textContent = Math.round(percent) + '%';
-            }
-        });
-
-        // Faylni yuborish
-        xhr.send(formData);
-
-        // Fayl yuklanmoqda, progress barni ko'rsatish
-        progressContainer.style.display = 'block';
-    });
-</script>
