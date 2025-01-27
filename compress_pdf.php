@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 <style>
     .custom-file-label {
         display: inline-block;
-        background-color: #007BFF;
+        background-color: #FF0000;
         color: white;
         padding: 10px 20px;
         border-radius: 5px;
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
         text-align: center;
     }
     .custom-file-label:hover {
-        background-color: #FF0000;
+        background-color: #FFC107;
     }
     #file {
         display: none; /* Asl fayl tanlash tugmasini yashirish */
