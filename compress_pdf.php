@@ -76,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 <body>
     <a href="https://profiuniversity.uz/" class="logo">
         <img class="logo_first" src="logo.svg" alt="">
-        <img class="logo_second" src="logo_white.svg" alt="">
     </a>
 
 <div class="button-container">
