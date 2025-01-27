@@ -80,24 +80,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 
 <div class="button-container">
 <form id="uploadForm" action="compress_pdf.php" method="POST" enctype="multipart/form-data">
-    <label for="file">PDF faylni tanlang:</label>
-    
+    <!-- Fayl tanlash tugmasi -->
+    <label class="custom-file-label" for="file">PDF faylni tanlang:</label>
     <input type="file" name="file" id="file" accept="application/pdf" required>
-    <button class = "button8" type="submit">Faylni yuklash va kichraytirish</button>
+    
+    <!-- Faylni yuklash tugmasi -->
+    <button class="button8" type="submit">Faylni yuklash va kichraytirish</button>
 </form>
 
 <!-- Asosiy sahifaga qaytish tugmasi -->
-<br><a href="index.html"><button class = "button9" >Asosiy sahifaga qaytish</button></a>
+<br><a href="index.html"><button class="button9">Asosiy sahifaga qaytish</button></a>
 </div>
-    </body>
-    </html>
+</body>
+</html>
+
 <script>
     const uploadForm = document.getElementById('uploadForm');
-    uploadForm.addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('file');
+    const fileLabel = document.querySelector('.custom-file-label');
+
+    // Fayl tanlanganda label matnini fayl nomiga o'zgartirish
+    fileInput.addEventListener('change', function () {
+        if (fileInput.files.length > 0) {
+            fileLabel.textContent = fileInput.files[0].name;
+        }
+    });
+
+    uploadForm.addEventListener('submit', function (e) {
         // Fayl tanlanganini tekshirish
-        if (document.getElementById('file').files.length === 0) {
+        if (fileInput.files.length === 0) {
             alert('Iltimos, faylni tanlang!');
             e.preventDefault(); // Forma yuborilmasligi uchun to'xtatish
         }
     });
 </script>
+
+<style>
+    .custom-file-label {
+        display: inline-block;
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .custom-file-label:hover {
+        background-color: #0056b3;
+    }
+    #file {
+        display: none; /* Asl fayl tanlash tugmasini yashirish */
+    }
+</style>
