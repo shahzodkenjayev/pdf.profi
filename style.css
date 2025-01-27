@@ -38,6 +38,11 @@ body {
     justify-content: center; /* Markazga joylash */
     gap: 20px; /* Tugmalar orasidagi bo'shliq */
 }
+@media (max-width: 768px) {
+    .button-container button:nth-child(n+6) {
+        display: none;  /* 6-chi va undan keyingi tugmalarni yashirish */
+    }
+}
 
 .custom-button {
     font-size: 20px; /* Tugma matni kattaligi */
